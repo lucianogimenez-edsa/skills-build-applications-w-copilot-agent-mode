@@ -1,5 +1,9 @@
 import { useEffect, useState } from 'react'
-import { fetchCollection } from '../api'
+import { normalizeCollection } from '../api'
+
+const activitiesApiUrl = import.meta.env.VITE_CODESPACE_NAME
+  ? `https://${import.meta.env.VITE_CODESPACE_NAME}-8000.app.github.dev/api/activities/`
+  : 'http://localhost:8000/api/activities/'
 
 function Activities() {
   const [activities, setActivities] = useState([])
@@ -11,7 +15,13 @@ function Activities() {
 
     async function loadActivities() {
       try {
-        const data = await fetchCollection('activities')
+        const response = await fetch(activitiesApiUrl)
+
+        if (!response.ok) {
+          throw new Error(`Request failed for activities: ${response.status}`)
+        }
+
+        const data = normalizeCollection(await response.json())
 
         if (!ignore) {
           setActivities(data)
