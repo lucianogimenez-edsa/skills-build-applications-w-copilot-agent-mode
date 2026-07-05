@@ -1,10 +1,23 @@
 import express from 'express';
 import { connectDatabase } from './config/database';
 import { Activity, Leaderboard, Team, User, Workout } from './models';
+import cors from 'cors';
 
 const app = express();
 const port = 8000;
 
+const codespaceName = process.env.CODESPACE_NAME;
+
+app.use(
+  cors({
+    origin: codespaceName
+      ? [
+          `https://${codespaceName}-5173.app.github.dev`,
+          'http://localhost:5173',
+        ]
+      : 'http://localhost:5173',
+  })
+);
 app.use(express.json());
 
 app.get('/api/health', (_req, res) => {
