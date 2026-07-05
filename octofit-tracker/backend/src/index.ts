@@ -3,7 +3,7 @@ import { connectDatabase } from './config/database';
 import { Activity, Leaderboard, Team, User, Workout } from './models';
 
 const app = express();
-const port = Number(process.env.PORT) || 8000;
+const port = 8000;
 
 app.use(express.json());
 
